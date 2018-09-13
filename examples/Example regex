@@ -1,0 +1,35 @@
+VAR w;
+
+PROCEDURE foo(x, y)
+	PROCEDUE work(x) w := x * y;
+CALL work(5);
+
+BEGIN
+	CALL foo(1, 5);
+END.
+
+WHITESPACE = \s*\r*\t*
+NUMBERS = (0|[1-9]*[0-9]*)
+IDENTIFIERS = [a-zA-Z]+[0-9]*
+BEGIN = BEGIN
+END = END
+CALL = CALL
+PROCEDURE = PROCEDURE
+WHILE = WHILE
+DO = DO
+VAR = VAR
+IF = IF
+THEN = THEN
+ELSE = ELSE
+SEPARATORS = (\(|\)|\,|\;|\.)
+MULT = \*
+DIV = \/
+PLUS = \+
+MINUS = -
+NE = <>
+EQ = =
+LT = <
+GT = >
+LTE = <=
+GTE = >=
+ASSIGN = :=

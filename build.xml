@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+<project name="cs4090" default="compile">
+	<!-- ANTLR version -->
+	<property name="antlr.version" value="4.5.3" />
+
+	<!-- debug properties -->
+	<property name="debug.enabled" value="on" />
+	<property name="debug.level" value="lines,vars,source" />
+
+
+	<!-- paths -->
+	<path id="project.class.path">
+		<fileset dir="lib">
+			<include name="**/*.jar"/>
+		</fileset>
+		<dirset dir="bin">
+			<include name="**"/>
+		</dirset>
+	</path>
+
+	<path id="src.paths">
+		<pathelement location="src" />
+	</path>
+	<property name="src.paths" refid="src.paths" />
+	<path id="src.parser.paths">
+		<pathelement location="gen" />
+		<path refid="src.paths" />
+	</path>
+	<property name="src.parser.paths" refid="src.parser.paths" />
+
+
+	<!-- ensure target dirs exist -->
+	<target name="-init">
+		<mkdir dir="bin" />
+		<mkdir dir="gen" />
+	</target>
+
+	<!-- do a dependency check -->
+	<target name="-check-deps">
+		<depend srcdir="${src.paths};${src.parser.paths}" destdir="bin" cache="bin/depcache" closure="yes" />
+	</target>
+
+
+	<!-- parser -->
+	<target name="-check-parser" depends="-init">
+		<condition property="parser.uptodate">
+			<and>
+				<uptodate srcfile="antlr/Blaise.g4" targetfile="gen/BlaiseParser.java" />
+				<uptodate srcfile="antlr/Blaise.g4" targetfile="gen/BlaiseLexer.java" />
+				<uptodate srcfile="antlr/Blaise.g4" targetfile="gen/BlaiseListener.java" />
+			</and>
+		</condition>
+	</target>
+
+	<target name="-parser" depends="-check-parser" unless="parser.uptodate">
+		<echo level="error" message="Generating parser code" />
+		<java jar="lib/antlr-${antlr.version}-complete.jar" dir="antlr/" fork="true" failonerror="true">
+			<arg value="-o" />
+			<arg value="../gen/" />
+			<arg value="Blaise.g4" />
+		</java>
+	</target>
+
+	<target name="compile-parser" depends="-parser,-check-deps" description="Compile the parser.">
+		<javac includeantruntime="true" srcdir="${src.parser.paths}" destdir="bin" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<classpath refid="project.class.path" />
+		</javac>
+	</target>
+
+	<target name="clean-parser" description="Clean all generated/compiled parser files.">
+		<delete dir="gen" />
+		<delete>
+			<fileset dir="bin">
+				<patternset>
+					<include name="BlaiseParser*.class" />
+					<include name="BlaiseLexer.class" />
+					<include name="BlaiseListener.class" />
+					<include name="BlaiseBaseListener.class" />
+				</patternset>
+			</fileset>
+		</delete>
+	</target>
+
+
+	<!-- main compilation targets -->
+	<target name="compile" depends="compile-parser,-check-deps" description="Compile the compiler.">
+		<javac includeantruntime="true" srcdir="${src.paths}" destdir="bin" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<classpath refid="project.class.path" />
+		</javac>
+	</target>
+
+
+	<!-- project cleanup -->
+	<target name="clean" description="Clean all generated/compiled files.">
+		<delete dir="bin" />
+		<delete dir="gen" />
+	</target>
+</project>

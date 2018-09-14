@@ -19,8 +19,8 @@ fragment DIGIT 		: [0-9] ;
 fragment LEADDIGIT	: [1-9] ;
 
 WHITESPACE          : (' ' | '\t' | '\r' | '\s')+ {$channel=HIDDEN;} ;
-NUMBERS 			: (LEADDIGIT DIGIT*) ;
-IDENTIFIERS 		: [LOWERCASE UPPERASE]+ DIGIT* ;
+NUMBER 				: (LEADDIGIT DIGIT*) ;
+ID			 		: [LOWERCASE UPPERASE]+ DIGIT* ;
 BEGIN 				: B E G I N ;
 END 				: E N D ;
 CALL				: C A L L ;
@@ -46,7 +46,7 @@ LT 					: < ;
 GT 					: > ;
 LTE 				: <= ;
 GTE 				: >= ;
-ASSIGN 				: := ;
+ASSIGN 				: \:= ;
 
 
 

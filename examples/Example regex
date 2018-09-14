@@ -8,28 +8,57 @@ BEGIN
 	CALL foo(1, 5);
 END.
 
-WHITESPACE = \s*\r*\t*
-NUMBERS = (0|[1-9]*[0-9]*)
-IDENTIFIERS = [a-zA-Z]+[0-9]*
-BEGIN = BEGIN
-END = END
-CALL = CALL
-PROCEDURE = PROCEDURE
-WHILE = WHILE
-DO = DO
-VAR = VAR
-IF = IF
-THEN = THEN
-ELSE = ELSE
+
+/*
+ * Lexer Rules
+ */
+
+fragment LOWERCASE  : [a-z] ;
+fragment UPPERCASE  : [A-Z] ;
+fragment DIGIT 		: [0-9] ;
+fragment LEADDIGIT	: [1-9] ;
+
+WHITESPACE          : (' ' | '\t' | '\r' | '\s')+ {$channel=HIDDEN;} ;
+NUMBERS 			: (LEADDIGIT DIGIT*) ;
+IDENTIFIERS 		: [LOWERCASE UPPERASE]+ DIGIT* ;
+BEGIN 				: B E G I N ;
+END 				: E N D ;
+CALL				: C A L L ;
+PROCEDURE 			: P R O C E D U R E ;
+WHILE 				: W H I L E ;
+DO 					: D O ;
+VAR 				: V A R ;
+IF 					: I F ;
+THEN				: T H E N ;
+ELSE				: E L S E ;
+LPARN				: \( ;
+RPAREN				: \) ;
+COMMA				: \, ;
+SEMICOLON			: \; ;
+DOT					: \. ;
+MULT 				: \* ;
+DIV 				: \/ ;
+PLUS 				: \+ ;
+MINUS 				: - ;
+NE 					: <> ;
+EQ 					: = ;
+LT 					: < ;
+GT 					: > ;
+LTE 				: <= ;
+GTE 				: >= ;
+ASSIGN 				: := ;
+
+
+
+
+
+
+
+
+
+
+
+
+
 SEPARATORS = (\(|\)|\,|\;|\.)
-MULT = \*
-DIV = \/
-PLUS = \+
-MINUS = -
-NE = <>
-EQ = =
-LT = <
-GT = >
-LTE = <=
-GTE = >=
-ASSIGN = :=
+
